@@ -18,15 +18,15 @@ public class MyUserDetailsService implements UserDetailsService {
     private final UserAccountRepository userAccountRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserAccount userAccount = userAccountRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserAccount userAccount = userAccountRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
         // Đây là mấu chốt: Cung cấp vai trò (role) cho Spring Security
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userAccount.getRole());
 
         return new User(
-                userAccount.getUsername(),
+                userAccount.getEmail(),
                 userAccount.getPassword(),
                 Collections.singletonList(authority) // [ROLE_ADMIN] hoặc [ROLE_RESIDENT]
         );

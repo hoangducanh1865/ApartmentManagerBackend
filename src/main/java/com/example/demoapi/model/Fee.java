@@ -30,4 +30,7 @@ public class Fee {
     @Column(name = "billingcycle", length = 50)
     private String billingcycle;
 
+    @Column(name = "is_mandatory")
+    private boolean is_mandatory;
+
 }

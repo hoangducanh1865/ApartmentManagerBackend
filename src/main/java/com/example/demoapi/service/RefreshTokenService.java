@@ -34,8 +34,8 @@ public class RefreshTokenService {
 
 
     @Transactional
-    public String createRefreshToken(String username) {
-        UserAccount userAccount = userAccountRepository.findByUsername(username)
+    public String createRefreshToken(String email) {
+        UserAccount userAccount = userAccountRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // Xóa token cũ (nếu có)
@@ -65,7 +65,7 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new RuntimeException("Refresh token not found or expired!"));
 
         // 2. Lấy username từ token cũ TRƯỚC KHI xóa nó
-        String username = token.getUserAccount().getUsername();
+        String username = token.getUserAccount().getEmail();
 
         // 3. Tạo token mới (hàm createRefreshToken đã tự xóa token cũ)
         String newRefreshTokenString = createRefreshToken(username);

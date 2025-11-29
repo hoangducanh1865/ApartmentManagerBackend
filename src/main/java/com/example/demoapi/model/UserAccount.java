@@ -11,7 +11,8 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer accountid;
 
-    private String username;
+    @Column(nullable = false, unique = true)
+    private String email;
     private String password; // Will be encrypted
     private String role;     // "ADMIN" or "RESIDENT"
 

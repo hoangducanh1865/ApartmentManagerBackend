@@ -1,5 +1,5 @@
 package com.example.demoapi.dto;
 
 // Using 'record' for a simple, immutable DTO
-public record LoginRequest(String username, String password) {
+public record LoginRequest(String email, String password) {
 }
