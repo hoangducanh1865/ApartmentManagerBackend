@@ -4,7 +4,9 @@ import com.example.demoapi.dto.request.HouseholdRequest;
 import com.example.demoapi.dto.response.HouseholdResponse;
 import com.example.demoapi.model.*;
 import com.example.demoapi.repository.ApartmentRepository;
+import com.example.demoapi.repository.InvoiceRepository;
 import com.example.demoapi.repository.ResidentRepository;
+import com.example.demoapi.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ public class HouseholdService {
 
     private final ApartmentRepository apartmentRepository;
     private final ResidentRepository residentRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final UserAccountRepository userAccountRepository;
 
     public List<HouseholdResponse> getHouseholds(String search) {
         return apartmentRepository.findHouseholdsByKeyword(search);
@@ -142,5 +146,34 @@ public class HouseholdService {
                 .phoneNumber(owner.getPhonenumber())
                 .memberCount(memberCount)
                 .build();
+    }
+
+    @Transactional
+    public void deleteHousehold(Integer id) {
+        // 1. Tìm căn hộ
+        Apartment apartment = apartmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Căn hộ không tồn tại"));
+
+        // 2. CHECK AN TOÀN: Nếu đã có hóa đơn/giao dịch -> KHÔNG ĐƯỢC XÓA
+        if (invoiceRepository.existsByHouseid_Houseid(id)) {
+            throw new RuntimeException("Không thể xóa căn hộ này vì đã phát sinh dữ liệu hóa đơn/tài chính! Hãy chuyển trạng thái sang 'Trống' thay vì xóa.");
+        }
+
+        // 3. Lấy danh sách cư dân trong nhà
+        List<Resident> residents = residentRepository.findByApartment_Houseid(id);
+
+        for (Resident resident : residents) {
+            // 3.1. Xóa tài khoản User liên quan (Nếu có)
+            if (userAccountRepository.existsByResident(resident)) {
+                userAccountRepository.deleteByResident_Residentid(resident.getResidentid());
+            }
+
+            // 3.2. Xóa Cư dân (Hoặc chuyển trạng thái nếu muốn lưu vết)
+            // Ở đây tôi làm theo yêu cầu của bạn là XÓA LUÔN
+            residentRepository.delete(resident);
+        }
+
+        // 4. Xóa Căn hộ
+        apartmentRepository.delete(apartment);
     }
 }

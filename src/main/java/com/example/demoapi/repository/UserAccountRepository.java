@@ -13,4 +13,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     Boolean existsByEmail(String email);
 
     Boolean existsByResident(Resident resident);
+
+    void deleteByResident_Residentid(Integer residentId);
 }

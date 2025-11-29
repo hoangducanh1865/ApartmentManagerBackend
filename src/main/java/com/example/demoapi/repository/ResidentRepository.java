@@ -2,6 +2,8 @@ package com.example.demoapi.repository;
 
 import com.example.demoapi.model.Resident;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface ResidentRepository extends JpaRepository<Resident, Integer> {
@@ -13,4 +15,6 @@ public interface ResidentRepository extends JpaRepository<Resident, Integer> {
     Optional<Resident> findByApartment_HouseidAndIsHostTrue(Integer houseId);
 
     Long countByApartment_Houseid(Integer houseId);
+
+    List<Resident> findByApartment_Houseid(Integer id);
 }

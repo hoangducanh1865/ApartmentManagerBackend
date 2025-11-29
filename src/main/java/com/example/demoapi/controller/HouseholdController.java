@@ -86,4 +86,15 @@ public class HouseholdController {
         HouseholdResponse updatedHousehold = householdService.updateHousehold(id, request);
         return ResponseEntity.ok(updatedHousehold);
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<String> deleteHousehold(@PathVariable Integer id) {
+        try {
+            householdService.deleteHousehold(id);
+            return ResponseEntity.ok("Đã xóa hộ khẩu và các dữ liệu liên quan thành công.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
