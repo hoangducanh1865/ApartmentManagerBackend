@@ -63,7 +63,9 @@ public class SecurityConfig {
 
         // Cho phép tất cả các domain (hoặc sửa thành domain cụ thể của Google IDX nếu muốn chặt chẽ)
         configuration.setAllowedOriginPatterns(List.of(
-                "https://main.d1fpkat6bk87ik.amplifyapp.com/"
+                "https://main.d1fpkat6bk87ik.amplifyapp.com",
+                "https://d1kyo8tlhbz0hy.cloudfront.net",
+                "http://localhost:3000" // For local development
         ));
 
         // Cho phép các method

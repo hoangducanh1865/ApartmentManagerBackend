@@ -107,12 +107,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </Link>
           </div>
         </div>
-        
+
         <div className="bg-gray-50 px-8 py-4 border-t border-gray-100">
           <p className="text-xs text-center text-gray-500">
             Mẹo: Dùng <b>admin@bluemoon.com</b> / <b>123456</b> để vào Admin.
             <br />
-            Dùng <b>h.anh@gmail.com</b> / <b>123456</b> để vào Cư dân.
+            Dùng <b>bich.tran@email.com</b> / <b>MySecretPassword123</b> để vào Cư dân.
           </p>
         </div>
       </div>
