@@ -67,7 +67,7 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
     if (!household) return;
 
     const selectedField = editableFields.find(f => f.key === requestType);
-    
+
     const changes: RequestChange[] = selectedField ? [{
       key: String(selectedField.key),
       label: selectedField.label,
@@ -96,18 +96,18 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
   const StatusBadge = ({ status }: { status: string }) => {
     switch (status) {
       case 'PENDING':
-        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1"/> Chờ duyệt</span>;
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" /> Chờ duyệt</span>;
       case 'APPROVED':
-        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1"/> Đã duyệt</span>;
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" /> Đã duyệt</span>;
       case 'REJECTED':
-        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3 mr-1"/> Từ chối</span>;
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3 mr-1" /> Từ chối</span>;
       default:
         return null;
     }
   };
 
   if (loading) {
-     return <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>;
+    return <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>;
   }
 
   if (!household) {
@@ -121,7 +121,7 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column: User & Household Info */}
         <div className="md:col-span-2 space-y-6">
-          
+
           {/* User Info */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center space-x-4 mb-6">
@@ -143,7 +143,7 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
                 <Home className="w-5 h-5 mr-2 text-blue-600" />
                 Thông tin căn hộ
               </h3>
-              <button 
+              <button
                 onClick={() => setIsModalOpen(true)}
                 className="text-sm bg-blue-50 text-blue-600 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors flex items-center"
               >
@@ -158,11 +158,11 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
                 <p className="text-lg font-bold text-gray-800">{household.roomNumber}</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg flex items-center">
-                 <Building className="w-8 h-8 text-gray-400 mr-3" />
-                 <div>
-                    <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Tòa nhà</p>
-                    <p className="text-lg font-medium text-gray-800">{household.building || '---'}</p>
-                 </div>
+                <Building className="w-8 h-8 text-gray-400 mr-3" />
+                <div>
+                  <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Tòa nhà</p>
+                  <p className="text-lg font-medium text-gray-800">{household.building || '---'}</p>
+                </div>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg flex items-center">
                 <Ruler className="w-8 h-8 text-gray-400 mr-3" />
@@ -186,46 +186,46 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
                 </div>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg flex items-center">
-                 <Activity className="w-8 h-8 text-gray-400 mr-3" />
-                 <div>
-                    <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Trạng thái</p>
-                    <p className="text-lg font-medium text-gray-800">
-                        {household.status === ApartmentStatus.EMPTY ? 'Trống' 
-                         : household.status === ApartmentStatus.MAINTENANCE ? 'Đang bảo trì' 
-                         : 'Có người ở'}
-                    </p>
-                 </div>
+                <Activity className="w-8 h-8 text-gray-400 mr-3" />
+                <div>
+                  <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Trạng thái</p>
+                  <p className="text-lg font-medium text-gray-800">
+                    {household.status === ApartmentStatus.EMPTY ? 'Trống'
+                      : household.status === ApartmentStatus.MAINTENANCE ? 'Đang bảo trì'
+                        : 'Có người ở'}
+                  </p>
+                </div>
               </div>
             </div>
 
             <h4 className="font-semibold text-gray-700 mb-3 border-t pt-4">Danh sách thành viên</h4>
             <div className="overflow-hidden border rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Họ tên</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quan hệ</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày sinh</th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {members.map(member => (
-                            <tr key={member.id}>
-                                <td className="px-4 py-2 text-sm text-gray-900">{member.fullName}</td>
-                                <td className="px-4 py-2 text-sm text-gray-500">{member.relationToOwner}</td>
-                                <td className="px-4 py-2 text-sm text-gray-500">{member.dateOfBirth ? new Date(member.dateOfBirth).toLocaleDateString('vi-VN') : '-'}</td>
-                            </tr>
-                        ))}
-                         {members.length === 0 && (
-                            <tr><td colSpan={3} className="p-4 text-center text-gray-400 text-sm">Chưa có thông tin thành viên</td></tr>
-                         )}
-                    </tbody>
-                </table>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Họ tên</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quan hệ</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày sinh</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {members.map(member => (
+                    <tr key={member.id}>
+                      <td className="px-4 py-2 text-sm text-gray-900">{member.fullName}</td>
+                      <td className="px-4 py-2 text-sm text-gray-500">{member.relationToOwner}</td>
+                      <td className="px-4 py-2 text-sm text-gray-500">{member.dateOfBirth ? new Date(member.dateOfBirth).toLocaleDateString('vi-VN') : '-'}</td>
+                    </tr>
+                  ))}
+                  {members.length === 0 && (
+                    <tr><td colSpan={3} className="p-4 text-center text-gray-400 text-sm">Chưa có thông tin thành viên</td></tr>
+                  )}
+                </tbody>
+              </table>
             </div>
 
-             <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-100 text-sm text-yellow-800">
-                <p><strong>Lưu ý:</strong> Mọi thay đổi về thông tin hộ khẩu (số người, chủ hộ, diện tích) cần được Ban Quản Lý phê duyệt trước khi cập nhật vào hệ thống.</p>
-             </div>
+            <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-100 text-sm text-yellow-800">
+              <p><strong>Lưu ý:</strong> Mọi thay đổi về thông tin hộ khẩu (số người, chủ hộ, diện tích) cần được Ban Quản Lý phê duyệt trước khi cập nhật vào hệ thống.</p>
+            </div>
           </div>
         </div>
 
@@ -236,7 +236,7 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
               <History className="w-5 h-5 mr-2 text-gray-500" />
               Lịch sử yêu cầu
             </h3>
-            
+
             <div className="space-y-4 flex-1 overflow-y-auto max-h-[600px]">
               {myRequests.length > 0 ? (
                 myRequests.map((req) => (
@@ -247,9 +247,9 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
                     </div>
                     <p className="font-medium text-sm text-gray-800 line-clamp-2 group-hover:text-blue-600">{req.title}</p>
                     <div className="flex justify-end mt-2">
-                        <span className="text-xs text-blue-500 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            Xem chi tiết <ArrowRight className="w-3 h-3 ml-1"/>
-                        </span>
+                      <span className="text-xs text-blue-500 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        Xem chi tiết <ArrowRight className="w-3 h-3 ml-1" />
+                      </span>
                     </div>
                   </div>
                 ))
@@ -355,73 +355,73 @@ const ResidentProfile: React.FC<ResidentProfileProps> = ({ user }) => {
       {/* Modal View Request Detail */}
       {viewRequest && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-           <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
-              <div className="flex justify-between items-start mb-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Chi tiết yêu cầu</h2>
+                <p className="text-sm text-gray-500">Mã: {viewRequest.id}</p>
+              </div>
+              <button onClick={() => setViewRequest(null)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="font-semibold text-gray-700 mb-1">Trạng thái</p>
+                <StatusBadge status={viewRequest.status} />
+              </div>
+
+              <div>
+                <p className="font-semibold text-gray-700">Tiêu đề</p>
+                <p className="text-gray-900">{viewRequest.title}</p>
+              </div>
+
+              <div>
+                <p className="font-semibold text-gray-700">Nội dung / Lý do</p>
+                <p className="text-gray-600 bg-gray-50 p-3 rounded border border-gray-100 mt-1">{viewRequest.description}</p>
+              </div>
+
+              {viewRequest.changes && viewRequest.changes.length > 0 && (
                 <div>
-                   <h2 className="text-xl font-bold text-gray-800">Chi tiết yêu cầu</h2>
-                   <p className="text-sm text-gray-500">Mã: {viewRequest.id}</p>
+                  <p className="font-semibold text-gray-700 mb-2">Chi tiết thay đổi</p>
+                  <div className="text-sm border rounded-lg overflow-hidden">
+                    {viewRequest.changes.map((c, i) => (
+                      <div key={i} className="flex bg-gray-50 p-2">
+                        <div className="flex-1">
+                          <span className="block text-gray-500 text-xs">{c.label} (Cũ)</span>
+                          <span className="font-medium text-red-600 line-through">{c.oldValue}</span>
+                        </div>
+                        <div className="flex items-center px-2 text-gray-400">
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <span className="block text-gray-500 text-xs">{c.label} (Mới)</span>
+                          <span className="font-bold text-green-600">{c.newValue}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <button onClick={() => setViewRequest(null)} className="text-gray-400 hover:text-gray-600">
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
+              )}
 
-              <div className="space-y-4">
-                 <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="font-semibold text-gray-700 mb-1">Trạng thái</p>
-                    <StatusBadge status={viewRequest.status} />
-                 </div>
+              {viewRequest.status === 'REJECTED' && viewRequest.rejectReason && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <p className="text-red-800 font-bold text-sm mb-1">Phản hồi từ Ban Quản Lý:</p>
+                  <p className="text-red-700 text-sm">{viewRequest.rejectReason}</p>
+                </div>
+              )}
+              {viewRequest.status === 'APPROVED' && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <p className="text-green-800 font-bold text-sm">Ban Quản Lý đã chấp thuận yêu cầu và cập nhật dữ liệu.</p>
+                </div>
+              )}
+            </div>
 
-                 <div>
-                    <p className="font-semibold text-gray-700">Tiêu đề</p>
-                    <p className="text-gray-900">{viewRequest.title}</p>
-                 </div>
-                 
-                 <div>
-                    <p className="font-semibold text-gray-700">Nội dung / Lý do</p>
-                    <p className="text-gray-600 bg-gray-50 p-3 rounded border border-gray-100 mt-1">{viewRequest.description}</p>
-                 </div>
-
-                 {viewRequest.changes && viewRequest.changes.length > 0 && (
-                    <div>
-                       <p className="font-semibold text-gray-700 mb-2">Chi tiết thay đổi</p>
-                       <div className="text-sm border rounded-lg overflow-hidden">
-                          {viewRequest.changes.map((c, i) => (
-                             <div key={i} className="flex bg-gray-50 p-2">
-                                <div className="flex-1">
-                                    <span className="block text-gray-500 text-xs">{c.label} (Cũ)</span>
-                                    <span className="font-medium text-red-600 line-through">{c.oldValue}</span>
-                                </div>
-                                <div className="flex items-center px-2 text-gray-400">
-                                    <ArrowRight className="w-4 h-4" />
-                                </div>
-                                <div className="flex-1">
-                                    <span className="block text-gray-500 text-xs">{c.label} (Mới)</span>
-                                    <span className="font-bold text-green-600">{c.newValue}</span>
-                                </div>
-                             </div>
-                          ))}
-                       </div>
-                    </div>
-                 )}
-
-                 {viewRequest.status === 'REJECTED' && viewRequest.rejectReason && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                       <p className="text-red-800 font-bold text-sm mb-1">Phản hồi từ Ban Quản Lý:</p>
-                       <p className="text-red-700 text-sm">{viewRequest.rejectReason}</p>
-                    </div>
-                 )}
-                  {viewRequest.status === 'APPROVED' && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                       <p className="text-green-800 font-bold text-sm">Ban Quản Lý đã chấp thuận yêu cầu và cập nhật dữ liệu.</p>
-                    </div>
-                 )}
-              </div>
-
-              <div className="mt-6 text-right">
-                 <button onClick={() => setViewRequest(null)} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium">Đóng</button>
-              </div>
-           </div>
+            <div className="mt-6 text-right">
+              <button onClick={() => setViewRequest(null)} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium">Đóng</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { User, Household } from '../../../types';
-import { MOCK_FEES } from '../../../lib/mockData';
+import { User, Household, Invoice } from '../../../types';
 import { getHouseholdById } from '../../../lib/householdService';
+import { getInvoices } from '../../../lib/invoiceService';
 import { CreditCard, Home, AlertTriangle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -11,29 +11,31 @@ interface ResidentDashboardProps {
 
 const ResidentDashboard: React.FC<ResidentDashboardProps> = ({ user }) => {
   const [household, setHousehold] = useState<Household | null>(null);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Still using mock fees for now as per current state of app
-  const myFees = MOCK_FEES.filter(f => f.householdId === user.householdId);
-  const pendingFees = myFees.filter(f => f.status === 'PENDING');
-  const totalDebt = pendingFees.reduce((acc, curr) => acc + curr.amount, 0);
+  const pendingInvoices = invoices.filter(inv => inv.status === 'unpaid');
+  const paidInvoices = invoices.filter(inv => inv.status === 'paid');
+  const totalDebt = pendingInvoices.reduce((acc, curr) => acc + curr.totalAmount, 0);
 
   useEffect(() => {
-    const fetchHousehold = async () => {
-      if (user.householdId) {
-        try {
-          const data = await getHouseholdById(user.householdId);
-          setHousehold(data);
-        } catch (error) {
-          console.error("Failed to fetch household info", error);
-        } finally {
-          setLoading(false);
+    const fetchData = async () => {
+      try {
+        if (user.householdId) {
+          const [householdData, invoicesData] = await Promise.all([
+            getHouseholdById(user.householdId),
+            getInvoices(0, 100) // Get first 100 invoices for resident
+          ]);
+          setHousehold(householdData);
+          setInvoices(invoicesData.content);
         }
-      } else {
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      } finally {
         setLoading(false);
       }
     };
-    fetchHousehold();
+    fetchData();
   }, [user.householdId]);
 
   const formatCurrency = (amount: number) => {
@@ -60,8 +62,8 @@ const ResidentDashboard: React.FC<ResidentDashboardProps> = ({ user }) => {
           <div>
             <h2 className="text-lg font-semibold text-gray-800">Thông tin căn hộ</h2>
             <p className="text-gray-500 text-sm">
-                {household?.building ? `Tòa ${household.building} - ` : ''} 
-                Phòng {household?.roomNumber || 'N/A'}
+              {household?.building ? `Tòa ${household.building} - ` : ''}
+              Phòng {household?.roomNumber || 'N/A'}
             </p>
           </div>
         </div>
@@ -71,8 +73,8 @@ const ResidentDashboard: React.FC<ResidentDashboardProps> = ({ user }) => {
             <p className="font-medium text-gray-900">{household?.ownerName || 'Chưa cập nhật'}</p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">
-             <p className="text-gray-500 mb-1">Tòa nhà</p>
-             <p className="font-medium text-gray-900">{household?.building || '---'}</p>
+            <p className="text-gray-500 mb-1">Tòa nhà</p>
+            <p className="font-medium text-gray-900">{household?.building || '---'}</p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="text-gray-500 mb-1">Diện tích</p>
@@ -98,11 +100,11 @@ const ResidentDashboard: React.FC<ResidentDashboardProps> = ({ user }) => {
             </div>
           </div>
           <p className="mt-4 text-sm text-red-100">
-            Bạn có {pendingFees.length} khoản phí chưa thanh toán
+            Bạn có {pendingInvoices.length} hóa đơn chưa thanh toán
           </p>
           <div className="mt-6">
-            <Link 
-              to="/resident/fees" 
+            <Link
+              to="/list/fees"
               className="block w-full text-center py-2 bg-white text-red-600 font-medium rounded-lg hover:bg-red-50 transition-colors"
             >
               Thanh toán ngay
@@ -113,27 +115,27 @@ const ResidentDashboard: React.FC<ResidentDashboardProps> = ({ user }) => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center space-x-3 mb-4">
-               <CreditCard className="w-5 h-5 text-green-600" />
-               <h3 className="font-semibold text-gray-800">Giao dịch gần đây</h3>
+              <CreditCard className="w-5 h-5 text-green-600" />
+              <h3 className="font-semibold text-gray-800">Giao dịch gần đây</h3>
             </div>
-            {myFees.filter(f => f.status === 'PAID').slice(0, 3).map(fee => (
-              <div key={fee.id} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+            {paidInvoices.slice(0, 3).map(invoice => (
+              <div key={invoice.id} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-gray-800">{fee.name}</p>
-                  <p className="text-xs text-gray-500">{fee.month}</p>
+                  <p className="text-sm font-medium text-gray-800">{invoice.title}</p>
+                  <p className="text-xs text-gray-500">Tháng {invoice.month}/{invoice.year}</p>
                 </div>
                 <span className="text-sm font-medium text-green-600">
-                  {formatCurrency(fee.amount)}
+                  {formatCurrency(invoice.totalAmount)}
                 </span>
               </div>
             ))}
-             {myFees.filter(f => f.status === 'PAID').length === 0 && (
-                 <p className="text-sm text-gray-400 italic">Chưa có giao dịch nào.</p>
-             )}
+            {paidInvoices.length === 0 && (
+              <p className="text-sm text-gray-400 italic">Chưa có giao dịch nào.</p>
+            )}
           </div>
-           <Link to="/resident/history" className="text-sm text-blue-600 font-medium hover:underline mt-4 inline-block">
-             Xem tất cả lịch sử &rarr;
-           </Link>
+          <Link to="/list/history" className="text-sm text-blue-600 font-medium hover:underline mt-4 inline-block">
+            Xem tất cả lịch sử &rarr;
+          </Link>
         </div>
       </div>
     </div>

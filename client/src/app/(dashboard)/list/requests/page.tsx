@@ -8,7 +8,7 @@ const RequestManager: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
   const [selectedRequest, setSelectedRequest] = useState<RequestTicket | null>(null);
 
-  const filteredRequests = requests.filter(r => 
+  const filteredRequests = requests.filter(r =>
     filterStatus === 'ALL' ? true : r.status === filterStatus
   );
 
@@ -36,11 +36,11 @@ const RequestManager: React.FC = () => {
   const StatusBadge = ({ status }: { status: string }) => {
     switch (status) {
       case 'PENDING':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1"/> Chờ duyệt</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" /> Chờ duyệt</span>;
       case 'APPROVED':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1"/> Đã duyệt</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" /> Đã duyệt</span>;
       case 'REJECTED':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3 mr-1"/> Từ chối</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3 mr-1" /> Từ chối</span>;
       default:
         return null;
     }
@@ -50,20 +50,19 @@ const RequestManager: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <h1 className="text-2xl font-bold text-gray-800">Xử lý yêu cầu cư dân</h1>
-        
+
         <div className="flex bg-white rounded-lg p-1 shadow-sm border border-gray-200">
           {['ALL', 'PENDING', 'APPROVED', 'REJECTED'].map((status) => (
-             <button
-                key={status}
-                onClick={() => setFilterStatus(status as any)}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                  filterStatus === status 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-600 hover:bg-gray-50'
+            <button
+              key={status}
+              onClick={() => setFilterStatus(status as any)}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${filterStatus === status
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'text-gray-600 hover:bg-gray-50'
                 }`}
-             >
-               {status === 'ALL' ? 'Tất cả' : status === 'PENDING' ? 'Chờ duyệt' : status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối'}
-             </button>
+            >
+              {status === 'ALL' ? 'Tất cả' : status === 'PENDING' ? 'Chờ duyệt' : status === 'APPROVED' ? 'Đã duyệt' : 'Đã từ chối'}
+            </button>
           ))}
         </div>
       </div>
@@ -90,7 +89,7 @@ const RequestManager: React.FC = () => {
                   <td className="px-6 py-4">{req.createdAt}</td>
                   <td className="px-6 py-4"><StatusBadge status={req.status} /></td>
                   <td className="px-6 py-4 text-right">
-                    <button 
+                    <button
                       onClick={() => setSelectedRequest(req)}
                       className="text-blue-600 hover:text-blue-800 flex items-center justify-end w-full"
                     >
@@ -152,7 +151,7 @@ const RequestManager: React.FC = () => {
                           <tr key={index}>
                             <td className="px-4 py-3 font-medium text-gray-900">{change.label}</td>
                             <td className="px-4 py-3 text-red-600 bg-red-50">{change.oldValue}</td>
-                            <td className="px-4 py-3 text-center text-gray-400"><ArrowRight className="w-4 h-4 mx-auto"/></td>
+                            <td className="px-4 py-3 text-center text-gray-400"><ArrowRight className="w-4 h-4 mx-auto" /></td>
                             <td className="px-4 py-3 text-green-600 bg-green-50 font-bold">{change.newValue}</td>
                           </tr>
                         ))}
@@ -163,10 +162,10 @@ const RequestManager: React.FC = () => {
               )}
 
               {selectedRequest.status === 'REJECTED' && selectedRequest.rejectReason && (
-                 <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-sm font-bold text-red-800">Lý do từ chối:</p>
-                    <p className="text-red-700">{selectedRequest.rejectReason}</p>
-                 </div>
+                <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-sm font-bold text-red-800">Lý do từ chối:</p>
+                  <p className="text-red-700">{selectedRequest.rejectReason}</p>
+                </div>
               )}
             </div>
 
@@ -177,7 +176,7 @@ const RequestManager: React.FC = () => {
               >
                 Đóng
               </button>
-              
+
               {selectedRequest.status === 'PENDING' && (
                 <>
                   <button

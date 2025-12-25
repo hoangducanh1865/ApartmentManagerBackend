@@ -24,9 +24,9 @@ const LoginPage: React.FC<LoginProps> = ({ onLogin }) => {
       const user = await login(email, password);
       onLogin(user);
       if (user.role === Role.ADMIN) {
-        navigate('/admin/dashboard');
+        navigate('/admin');
       } else {
-        navigate('/resident/dashboard');
+        navigate('/resident');
       }
     } catch (err: any) {
       setError(err.message || 'Đăng nhập thất bại');

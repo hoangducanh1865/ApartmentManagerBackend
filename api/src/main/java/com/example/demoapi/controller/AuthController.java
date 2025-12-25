@@ -1,22 +1,27 @@
 package com.example.demoapi.controller;
 
-import com.example.demoapi.dto.LoginRequest;
-import com.example.demoapi.dto.LoginResponse;
-import com.example.demoapi.dto.RefreshTokenResponse;
-import com.example.demoapi.dto.request.RegisterRequest;
-import com.example.demoapi.service.AuthenticationService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import com.example.demoapi.dto.LoginRequest;
+import com.example.demoapi.dto.LoginResponse;
+import com.example.demoapi.dto.RefreshTokenResponse;
+import com.example.demoapi.dto.request.RegisterRequest;
+import com.example.demoapi.service.AuthenticationService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -81,11 +86,11 @@ public class AuthController {
     }
 
     // --- Helper Methods cho Cookie ---
-
     private void setRefreshTokenCookie(HttpServletResponse response, String token, long maxAgeSeconds) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", token)
                 .httpOnly(true)
                 .secure(secureCookie)
+                .sameSite(secureCookie ? "None" : "Lax") // Required for cross-origin cookies
                 .path("/api/auth")
                 .maxAge(maxAgeSeconds)
                 .build();
@@ -93,7 +98,9 @@ public class AuthController {
     }
 
     private String getRefreshTokenFromCookie(HttpServletRequest request) {
-        if (request.getCookies() == null) return null;
+        if (request.getCookies() == null) {
+            return null;
+        }
 
         return Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equals("refreshToken"))

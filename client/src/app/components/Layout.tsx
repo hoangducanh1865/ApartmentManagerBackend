@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User, Role } from '../../types';
-import { 
-  Home, 
-  Users, 
-  CreditCard, 
-  FileText, 
-  LogOut, 
-  Menu, 
+import {
+  Home,
+  Users,
+  CreditCard,
+  FileText,
+  LogOut,
+  Menu,
   X,
   PieChart,
   Bell,
@@ -30,20 +30,20 @@ interface NavLink {
 // Permission configuration - centralized access control
 const navigationConfig: NavLink[] = [
   // Admin-only pages
-  { path: '/admin/dashboard', label: 'Tổng quan', icon: PieChart, roles: [Role.ADMIN] },
-  { path: '/admin/households', label: 'Quản lý hộ khẩu', icon: Building, roles: [Role.ADMIN] },
-  { path: '/admin/residents', label: 'Quản lý cư dân', icon: UserCheck, roles: [Role.ADMIN] },
+  { path: '/admin', label: 'Tổng quan', icon: PieChart, roles: [Role.ADMIN] },
+  { path: '/list/households', label: 'Quản lý hộ khẩu', icon: Building, roles: [Role.ADMIN] },
+  { path: '/list/residents', label: 'Quản lý cư dân', icon: UserCheck, roles: [Role.ADMIN] },
   { path: '/admin/fees', label: 'Quản lý khoản thu', icon: Banknote, roles: [Role.ADMIN] },
-  { path: '/admin/invoices', label: 'Quản lý hóa đơn', icon: Receipt, roles: [Role.ADMIN] },
-  { path: '/admin/registrations', label: 'Tạm trú & Tạm vắng', icon: MapPin, roles: [Role.ADMIN] },
-  { path: '/admin/requests', label: 'Yêu cầu cư dân', icon: Bell, roles: [Role.ADMIN] },
+  { path: '/list/invoices', label: 'Quản lý hóa đơn', icon: Receipt, roles: [Role.ADMIN] },
+  { path: '/list/registrations', label: 'Tạm trú & Tạm vắng', icon: MapPin, roles: [Role.ADMIN] },
+  { path: '/list/requests', label: 'Yêu cầu cư dân', icon: Bell, roles: [Role.ADMIN] },
   
   // Resident-only pages
-  { path: '/resident/dashboard', label: 'Trang chủ', icon: Home, roles: [Role.RESIDENT] },
-  { path: '/resident/fees', label: 'Danh sách phí', icon: CreditCard, roles: [Role.RESIDENT] },
-  { path: '/resident/history', label: 'Lịch sử thanh toán', icon: FileText, roles: [Role.RESIDENT] },
-  { path: '/resident/registrations', label: 'Tạm trú & Tạm vắng', icon: MapPin, roles: [Role.RESIDENT] },
-  { path: '/resident/profile', label: 'Thông tin cá nhân', icon: Users, roles: [Role.RESIDENT] },
+  { path: '/resident', label: 'Trang chủ', icon: Home, roles: [Role.RESIDENT] },
+  { path: '/list/fees', label: 'Danh sách phí', icon: CreditCard, roles: [Role.RESIDENT] },
+  { path: '/list/history', label: 'Lịch sử thanh toán', icon: FileText, roles: [Role.RESIDENT] },
+  { path: '/owner', label: 'Tạm trú & Tạm vắng', icon: MapPin, roles: [Role.RESIDENT] },
+  { path: '/profile', label: 'Thông tin cá nhân', icon: Users, roles: [Role.RESIDENT] },
   
   // Shared pages (accessible by multiple roles) - add here if needed
   // { path: '/shared/page', label: 'Shared Page', icon: Home, roles: [Role.ADMIN, Role.RESIDENT] },
@@ -86,27 +86,26 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside 
-        className={`fixed lg:static inset-y-0 left-0 z-30 w-64 bg-slate-800 text-white transform transition-transform duration-200 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-30 w-64 bg-slate-800 text-white transform transition-transform duration-200 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
       >
         <div className="h-16 flex items-center justify-center border-b border-slate-700">
           <h1 className="text-xl font-bold tracking-wider">BLUEMOON</h1>
         </div>
-        
+
         <div className="p-4">
           <div className="flex items-center space-x-3 mb-6 p-2 bg-slate-700 rounded-lg">
-            <img 
-              src={user.avatar || 'https://picsum.photos/200'} 
-              alt="Avatar" 
+            <img
+              src={user.avatar || 'https://picsum.photos/200'}
+              alt="Avatar"
               className="w-10 h-10 rounded-full border-2 border-slate-500"
             />
             <div className="overflow-hidden">
@@ -123,11 +122,10 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
-                    isActive 
-                      ? 'bg-blue-600 text-white' 
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${isActive
+                      ? 'bg-blue-600 text-white'
                       : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                  }`}
+                    }`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
                   <Icon className="w-5 h-5 mr-3" />
@@ -135,7 +133,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 </Link>
               );
             })}
-            
+
             <button
               onClick={onLogout}
               className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-300 rounded-md hover:bg-slate-700 hover:text-red-200 mt-8"

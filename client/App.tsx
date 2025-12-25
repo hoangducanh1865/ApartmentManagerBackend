@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './src/app/components/Layout';
+import Layout from './src/app/layout';
 import Login from './src/app/login/page';
 import Register from './src/app/register/page';
 import ResidentDashboard from './src/app/(dashboard)/resident/page';
@@ -64,7 +64,7 @@ const App: React.FC = () => {
           {/* Root redirect */}
           <Route path="/" element={
             user ? (
-              <Navigate to={user.role === Role.ADMIN ? "/admin/dashboard" : "/resident/dashboard"} replace />
+              <Navigate to={user.role === Role.ADMIN ? "/admin" : "/resident"} replace />
             ) : (
               <Navigate to="/login" replace />
             )
@@ -72,7 +72,7 @@ const App: React.FC = () => {
 
           <Route path="/login" element={
             user ? (
-              <Navigate to={user.role === Role.ADMIN ? "/admin/dashboard" : "/resident/dashboard"} replace />
+              <Navigate to={user.role === Role.ADMIN ? "/admin" : "/resident"} replace />
             ) : (
               <Login onLogin={handleLogin} />
             )
@@ -81,7 +81,7 @@ const App: React.FC = () => {
 
           {/* Resident Routes */}
           <Route
-            path="/resident/dashboard"
+            path="/resident"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.RESIDENT]}>
                 <ResidentDashboard user={user!} />
@@ -89,7 +89,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/resident/fees"
+            path="/list/fees"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.RESIDENT]}>
                 <FeeList user={user!} />
@@ -97,7 +97,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/resident/history"
+            path="/list/history"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.RESIDENT]}>
                 <PaymentHistory user={user!} />
@@ -105,7 +105,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/resident/registrations"
+            path="/owner"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.RESIDENT]}>
                 <ResidentRegistration user={user!} />
@@ -113,7 +113,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/resident/profile"
+            path="/profile"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.RESIDENT]}>
                 <ResidentProfile user={user!} />
@@ -123,7 +123,7 @@ const App: React.FC = () => {
 
           {/* Admin Routes */}
           <Route
-            path="/admin/dashboard"
+            path="/admin"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.ADMIN]}>
                 <AdminDashboard />
@@ -131,7 +131,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/admin/households"
+            path="/list/households"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.ADMIN]}>
                 <HouseholdManager />
@@ -139,7 +139,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/admin/residents"
+            path="/list/residents"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.ADMIN]}>
                 <ResidentManager />
@@ -155,7 +155,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/admin/invoices"
+            path="/list/invoices"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.ADMIN]}>
                 <InvoiceManager />
@@ -163,7 +163,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/admin/registrations"
+            path="/list/registrations"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.ADMIN]}>
                 <RegistrationManager />
@@ -171,7 +171,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/admin/requests"
+            path="/list/requests"
             element={
               <ProtectedRoute user={user} allowedRoles={[Role.ADMIN]}>
                 <RequestManager />
