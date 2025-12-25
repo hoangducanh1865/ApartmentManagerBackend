@@ -1,23 +1,22 @@
-
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './src/app/layout';
-import Login from './src/app/login/page';
-import Register from './src/app/register/page';
-import ResidentDashboard from './src/app/(dashboard)/resident/page';
-import FeeList from './src/app/(dashboard)/list/fees/page';
-import PaymentHistory from './src/app/(dashboard)/list/history/page';
-import ResidentProfile from './src/app/(dashboard)/profile/page';
-import AdminDashboard from './src/app/(dashboard)/admin/page';
-import HouseholdManager from './src/app/(dashboard)/list/households/page';
-import ResidentManager from './src/app/(dashboard)/list/residents/page';
-import RequestManager from './src/app/(dashboard)/list/requests/page';
-import FeeManager from './src/app/(dashboard)/admin/fees/page';
-import InvoiceManager from './src/app/(dashboard)/list/invoices/page';
-import RegistrationManager from './src/app/(dashboard)/list/registrations/page';
-import ResidentRegistration from './src/app/(dashboard)/owner/page';
-import { User, Role } from './src/types';
-import { getCurrentUser, logout } from './src/lib/authService';
+import Layout from './app/components/Layout';
+import Login from './app/login/page';
+import Register from './app/register/page';
+import ResidentDashboard from './app/(dashboard)/resident/page';
+import FeeList from './app/(dashboard)/list/fees/page';
+import PaymentHistory from './app/(dashboard)/list/history/page';
+import ResidentProfile from './app/(dashboard)/profile/page';
+import AdminDashboard from './app/(dashboard)/admin/page';
+import HouseholdManager from './app/(dashboard)/list/households/page';
+import ResidentManager from './app/(dashboard)/list/residents/page';
+import RequestManager from './app/(dashboard)/list/requests/page';
+import FeeManager from './app/(dashboard)/admin/fees/page';
+import InvoiceManager from './app/(dashboard)/list/invoices/page';
+import RegistrationManager from './app/(dashboard)/list/registrations/page';
+import ResidentRegistration from './app/(dashboard)/owner/page';
+import { User, Role } from './types';
+import { getCurrentUser, logout } from './lib/authService';
 
 interface ProtectedRouteProps {
   user: User | null;

@@ -1,17 +1,19 @@
 package com.example.demoapi.service;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demoapi.dto.request.SimulatePaymentRequest;
 import com.example.demoapi.model.Invoice;
 import com.example.demoapi.model.Payment;
 import com.example.demoapi.repository.InvoiceRepository;
 import com.example.demoapi.repository.PaymentRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,12 @@ public class PaymentService {
         // 4. Tính toán số tiền cần trả
         BigDecimal totalAmount = invoice.getTotalamount();
         BigDecimal paidAmount = paymentRepository.sumAmountPaidByInvoiceId(invoice.getInvoiceid());
+
+        // Xử lý trường hợp chưa có giao dịch nào (SQL SUM trả về null)
+        if (paidAmount == null) {
+            paidAmount = BigDecimal.ZERO;
+        }
+
         BigDecimal remainingAmount = totalAmount.subtract(paidAmount);
 
         BigDecimal amountToPay;
